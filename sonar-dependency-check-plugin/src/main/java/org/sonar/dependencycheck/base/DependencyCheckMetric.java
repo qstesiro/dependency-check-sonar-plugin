@@ -59,32 +59,32 @@ public class DependencyCheckMetric {
     @Override
     public String toString() {
         return "DependencyCheckMetric [inputcomponent=" + inputcomponent + ", totalDependencies=" + totalDependencies
-                + ", vulnerableDependencies=" + vulnerableDependencies + ", vulnerabilityCount=" + vulnerabilityCount
-                + ", blockerIssuesCount=" + blockerIssuesCount + ", criticalIssuesCount=" + criticalIssuesCount
-                + ", majorIssuesCount=" + majorIssuesCount + ", minorIssuesCount=" + minorIssuesCount
-                + ", infoIssuesCount=" + infoIssuesCount + "]";
+            + ", vulnerableDependencies=" + vulnerableDependencies + ", vulnerabilityCount=" + vulnerabilityCount
+            + ", blockerIssuesCount=" + blockerIssuesCount + ", criticalIssuesCount=" + criticalIssuesCount
+            + ", majorIssuesCount=" + majorIssuesCount + ", minorIssuesCount=" + minorIssuesCount
+            + ", infoIssuesCount=" + infoIssuesCount + "]";
     }
 
     public void incrementCount(Severity severity) {
         switch (severity) {
-            case BLOCKER:
-                this.blockerIssuesCount++;
-                break;
-            case CRITICAL:
-                this.criticalIssuesCount++;
-                break;
-            case MAJOR:
-                this.majorIssuesCount++;
-                break;
-            case MINOR:
-                this.minorIssuesCount++;
-                break;
-            case INFO:
-                this.infoIssuesCount++;
-                break;
-            default:
-                LOGGER.debug("Unknown severity {}", severity);
-                break;
+        case BLOCKER:
+            this.blockerIssuesCount++;
+            break;
+        case CRITICAL:
+            this.criticalIssuesCount++;
+            break;
+        case MAJOR:
+            this.majorIssuesCount++;
+            break;
+        case MINOR:
+            this.minorIssuesCount++;
+            break;
+        case INFO:
+            this.infoIssuesCount++;
+            break;
+        default:
+            LOGGER.debug("Unknown severity {}", severity);
+            break;
         }
     }
 
@@ -102,17 +102,60 @@ public class DependencyCheckMetric {
 
     public void saveMeasures(SensorContext context) {
         LOGGER.debug("Save measures on {}", inputcomponent);
-        context.<Integer>newMeasure().forMetric(DependencyCheckMetrics.CRITICAL_SEVERITY_VULNS).on(inputcomponent).withValue(blockerIssuesCount).save();
-        context.<Integer>newMeasure().forMetric(DependencyCheckMetrics.HIGH_SEVERITY_VULNS).on(inputcomponent).withValue(criticalIssuesCount).save();
-        context.<Integer>newMeasure().forMetric(DependencyCheckMetrics.MEDIUM_SEVERITY_VULNS).on(inputcomponent).withValue(majorIssuesCount).save();
-        context.<Integer>newMeasure().forMetric(DependencyCheckMetrics.LOW_SEVERITY_VULNS).on(inputcomponent).withValue(minorIssuesCount).save();
-        context.<Integer>newMeasure().forMetric(DependencyCheckMetrics.TOTAL_DEPENDENCIES).on(inputcomponent).withValue(totalDependencies).save();
-        context.<Integer>newMeasure().forMetric(DependencyCheckMetrics.VULNERABLE_DEPENDENCIES).on(inputcomponent).withValue(vulnerableDependencies).save();
-        context.<Integer>newMeasure().forMetric(DependencyCheckMetrics.TOTAL_VULNERABILITIES).on(inputcomponent).withValue(vulnerabilityCount).save();
-
-        context.<Integer>newMeasure().forMetric(DependencyCheckMetrics.INHERITED_RISK_SCORE).on(inputcomponent)
-            .withValue(DependencyCheckMetrics.inheritedRiskScore(blockerIssuesCount, criticalIssuesCount, majorIssuesCount, minorIssuesCount)).save();
-        context.<Double>newMeasure().forMetric(DependencyCheckMetrics.VULNERABLE_COMPONENT_RATIO).on(inputcomponent)
-            .withValue(DependencyCheckMetrics.vulnerableComponentRatio(vulnerabilityCount, vulnerableDependencies)).save();
+        context.<Integer>newMeasure()
+            .forMetric(DependencyCheckMetrics.CRITICAL_SEVERITY_VULNS)
+            .on(inputcomponent)
+            .withValue(blockerIssuesCount)
+            .save();
+        context.<Integer>newMeasure()
+            .forMetric(DependencyCheckMetrics.HIGH_SEVERITY_VULNS)
+            .on(inputcomponent)
+            .withValue(criticalIssuesCount)
+            .save();
+        context.<Integer>newMeasure()
+            .forMetric(DependencyCheckMetrics.MEDIUM_SEVERITY_VULNS)
+            .on(inputcomponent)
+            .withValue(majorIssuesCount)
+            .save();
+        context.<Integer>newMeasure()
+            .forMetric(DependencyCheckMetrics.LOW_SEVERITY_VULNS)
+            .on(inputcomponent)
+            .withValue(minorIssuesCount)
+            .save();
+        context.<Integer>newMeasure()
+            .forMetric(DependencyCheckMetrics.TOTAL_DEPENDENCIES)
+            .on(inputcomponent)
+            .withValue(totalDependencies)
+            .save();
+        context.<Integer>newMeasure()
+            .forMetric(DependencyCheckMetrics.VULNERABLE_DEPENDENCIES)
+            .on(inputcomponent)
+            .withValue(vulnerableDependencies)
+            .save();
+        context.<Integer>newMeasure()
+            .forMetric(DependencyCheckMetrics.TOTAL_VULNERABILITIES)
+            .on(inputcomponent)
+            .withValue(vulnerabilityCount)
+            .save();
+        context.<Integer>newMeasure()
+            .forMetric(DependencyCheckMetrics.INHERITED_RISK_SCORE)
+            .on(inputcomponent)
+            .withValue(
+                DependencyCheckMetrics.inheritedRiskScore(
+                    blockerIssuesCount,
+                    criticalIssuesCount,
+                    majorIssuesCount,
+                    minorIssuesCount
+                )
+            ).save();
+        context.<Double>newMeasure()
+            .forMetric(DependencyCheckMetrics.VULNERABLE_COMPONENT_RATIO)
+            .on(inputcomponent)
+            .withValue(
+                DependencyCheckMetrics.vulnerableComponentRatio(
+                    vulnerabilityCount,
+                    vulnerableDependencies
+                )
+            ).save();
     }
 }

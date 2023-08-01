@@ -77,7 +77,10 @@ public abstract class DependencyReason {
     }
 
     protected static TextRangeConfidence addDependencyToFirstLine(Dependency dependency, InputFile inputFile) {
-        LOGGER.debug("We haven't found a TextRange for {} in {}. We link to first line with {} confidence", dependency.getFileName(), inputFile, Confidence.LOW);
+        LOGGER.debug(
+            "We haven't found a TextRange for {} in {}. We link to first line with {} confidence",
+            dependency.getFileName(), inputFile, Confidence.LOW
+        );
         return new TextRangeConfidence(inputFile.selectLine(1), Confidence.LOW);
     }
     /**
@@ -93,44 +96,50 @@ public abstract class DependencyReason {
         dependency.sortVulnerabilityBycvssScore(context.config());
         List<Vulnerability> vulnerabilities = dependency.getVulnerabilities();
         Vulnerability highestVulnerability = vulnerabilities.get(0);
-        Severity severity = DependencyCheckUtils.cvssToSonarQubeSeverity(highestVulnerability.getCvssScore(context.config()), context.config());
-
+        Severity severity = DependencyCheckUtils.cvssToSonarQubeSeverity(
+            highestVulnerability.getCvssScore(context.config()), context.config()
+        );
         TextRangeConfidence textRange = getBestTextRange(dependency);
         InputComponent inputComponent = getInputComponent();
-
         NewIssue sonarIssue = context.newIssue();
-
         NewIssueLocation location = sonarIssue.newLocation()
             .on(inputComponent)
             .at(textRange.getTextRange())
-            .message(DependencyCheckUtils.formatDescription(dependency, vulnerabilities, highestVulnerability, context.config()));
-
-        sonarIssue
-            .at(location)
-            .forRule(RuleKey.of(DependencyCheckConstants.REPOSITORY_KEY, DependencyCheckUtils.getRuleKey(context.config())))
-            .overrideSeverity(severity)
-            .save();
+            .message(
+                DependencyCheckUtils.formatDescription(
+                    dependency,
+                    vulnerabilities,
+                    highestVulnerability,
+                    context.config()
+                )
+            );
+        sonarIssue.at(location).forRule(
+            RuleKey.of(
+                DependencyCheckConstants.REPOSITORY_KEY,
+                DependencyCheckUtils.getRuleKey(context.config()
+                )
+            )
+        ).overrideSeverity(severity).save();
         metrics.incrementCount(severity);
     }
 
     public void addIssue(SensorContext context, Dependency dependency, Vulnerability vulnerability) {
-        Severity severity = DependencyCheckUtils.cvssToSonarQubeSeverity(vulnerability.getCvssScore(context.config()), context.config());
-
+        Severity severity = DependencyCheckUtils.cvssToSonarQubeSeverity(
+            vulnerability.getCvssScore(context.config()), context.config()
+        );
         TextRangeConfidence textRange = getBestTextRange(dependency);
         InputComponent inputComponent = getInputComponent();
-
         NewIssue sonarIssue = context.newIssue();
-
         NewIssueLocation location = sonarIssue.newLocation()
             .on(inputComponent)
             .at(textRange.getTextRange())
             .message(DependencyCheckUtils.formatDescription(dependency, vulnerability, context.config()));
-
-        sonarIssue
-            .at(location)
-            .forRule(RuleKey.of(DependencyCheckConstants.REPOSITORY_KEY, DependencyCheckUtils.getRuleKey(context.config())))
-            .overrideSeverity(severity)
-            .save();
+        sonarIssue.at(location).forRule(
+            RuleKey.of(
+                DependencyCheckConstants.REPOSITORY_KEY,
+                DependencyCheckUtils.getRuleKey(context.config())
+            )
+        ).overrideSeverity(severity).save();
         metrics.incrementCount(severity);
     }
 }

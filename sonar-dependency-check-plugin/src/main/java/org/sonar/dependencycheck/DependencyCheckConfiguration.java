@@ -32,86 +32,97 @@ public class DependencyCheckConfiguration {
     private DependencyCheckConfiguration() {
         // do nothing
     }
+
     public static List<PropertyDefinition> getPropertyDefinitions() {
         return Arrays.asList(
-                PropertyDefinition.builder(DependencyCheckConstants.XML_REPORT_PATH_PROPERTY)
-                        .onQualifiers(Qualifiers.PROJECT)
-                        .subCategory(DependencyCheckConstants.SUB_CATEGORY_PATHS)
-                        .name("Dependency-Check XML report path")
-                        .description("path to the 'dependency-check-report.xml' file")
-                        .defaultValue(DependencyCheckConstants.XML_REPORT_PATH_DEFAULT)
-                        .deprecatedKey(DependencyCheckConstants.DEPRECTED_XML_REPORT_PATH_PROPERTY)
-                        .build(),
-                PropertyDefinition.builder(DependencyCheckConstants.JSON_REPORT_PATH_PROPERTY)
-                        .onQualifiers(Qualifiers.PROJECT)
-                        .subCategory(DependencyCheckConstants.SUB_CATEGORY_PATHS)
-                        .name("Dependency-Check JSON report path")
-                        .description("path to the 'dependency-check-report.json' file")
-                        .defaultValue(DependencyCheckConstants.JSON_REPORT_PATH_DEFAULT)
-                        .build(),
-                PropertyDefinition.builder(DependencyCheckConstants.HTML_REPORT_PATH_PROPERTY)
-                        .onQualifiers(Qualifiers.PROJECT)
-                        .subCategory(DependencyCheckConstants.SUB_CATEGORY_PATHS)
-                        .name("Dependency-Check HTML report path")
-                        .description("path to the 'dependency-check-report.html' file")
-                        .defaultValue(DependencyCheckConstants.HTML_REPORT_PATH_DEFAULT)
-                        .build(),
-                PropertyDefinition.builder(DependencyCheckConstants.SEVERITY_BLOCKER)
-                        .onQualifiers(Qualifiers.PROJECT)
-                        .subCategory(DependencyCheckConstants.SUB_CATEGORY_SEVERITIES)
-                        .name("Blocker")
-                        .description("Minimum score for blocker issues or -1 to deactivate blocker issues.")
-                        .defaultValue("9.0")
-                        .type(PropertyType.FLOAT)
-                        .build(),
-                PropertyDefinition.builder(DependencyCheckConstants.SEVERITY_CRITICAL)
-                        .onQualifiers(Qualifiers.PROJECT)
-                        .subCategory(DependencyCheckConstants.SUB_CATEGORY_SEVERITIES)
-                        .name("Critical")
-                        .description("Minimum score for critical issues or -1 to deactivate critical issues.")
-                        .defaultValue(Float.toString(DependencyCheckConstants.SEVERITY_CRITICAL_DEFAULT))
-                        .type(PropertyType.FLOAT)
-                        .build(),
-                PropertyDefinition.builder(DependencyCheckConstants.SEVERITY_MAJOR)
-                        .onQualifiers(Qualifiers.PROJECT)
-                        .subCategory(DependencyCheckConstants.SUB_CATEGORY_SEVERITIES)
-                        .name("Major")
-                        .description("Minimum score for major issues or -1 to deactivate major issues.")
-                        .defaultValue(Float.toString(DependencyCheckConstants.SEVERITY_MAJOR_DEFAULT))
-                        .type(PropertyType.FLOAT)
-                        .build(),
-                PropertyDefinition.builder(DependencyCheckConstants.SEVERITY_MINOR)
-                        .onQualifiers(Qualifiers.PROJECT)
-                        .subCategory(DependencyCheckConstants.SUB_CATEGORY_SEVERITIES)
-                        .name("Minor")
-                        .description("Minimum score for minor issues or -1 to deactivate minor issues.")
-                        .defaultValue(Float.toString(DependencyCheckConstants.SEVERITY_MINOR_DEFAULT))
-                        .type(PropertyType.FLOAT)
-                        .build(),
-                PropertyDefinition.builder(DependencyCheckConstants.SUMMARIZE_PROPERTY)
-                        .onQualifiers(Qualifiers.PROJECT)
-                        .subCategory(DependencyCheckConstants.SUB_CATEGORY_GENERAL)
-                        .name("Summarize")
-                        .description("When enabled we summarize all vulnerabilities per dependency.")
-                        .defaultValue(Boolean.toString(DependencyCheckConstants.SUMMARIZE_PROPERTY_DEFAULT))
-                        .type(PropertyType.BOOLEAN)
-                        .build(),
-                PropertyDefinition.builder(DependencyCheckConstants.SKIP_PROPERTY)
-                        .onQualifiers(Qualifiers.PROJECT)
-                        .subCategory(DependencyCheckConstants.SUB_CATEGORY_GENERAL)
-                        .name("Skip")
-                        .description("When enabled we skip this plugin.")
-                        .defaultValue(Boolean.toString(DependencyCheckConstants.SKIP_PROPERTY_DEFAULT))
-                        .type(PropertyType.BOOLEAN)
-                        .build(),
-                PropertyDefinition.builder(DependencyCheckConstants.SECURITY_HOTSPOT)
-                        .onQualifiers(Qualifiers.PROJECT)
-                        .subCategory(DependencyCheckConstants.SUB_CATEGORY_GENERAL)
-                        .name("Security-Hotspot")
-                        .description("When enabled all SonarQube issues are flagged as Security-Hotspot.")
-                        .defaultValue(Boolean.toString(DependencyCheckConstants.SECURITY_HOTSPOT_DEFAULT))
-                        .type(PropertyType.BOOLEAN)
-                        .build()
+            PropertyDefinition
+                .builder(DependencyCheckConstants.XML_REPORT_PATH_PROPERTY)
+                .onQualifiers(Qualifiers.PROJECT)
+                .subCategory(DependencyCheckConstants.SUB_CATEGORY_PATHS)
+                .name("Dependency-Check XML report path")
+                .description("path to the 'dependency-check-report.xml' file")
+                .defaultValue(DependencyCheckConstants.XML_REPORT_PATH_DEFAULT)
+                .deprecatedKey(DependencyCheckConstants.DEPRECTED_XML_REPORT_PATH_PROPERTY)
+                .build(),
+            PropertyDefinition
+                .builder(DependencyCheckConstants.JSON_REPORT_PATH_PROPERTY)
+                .onQualifiers(Qualifiers.PROJECT)
+                .subCategory(DependencyCheckConstants.SUB_CATEGORY_PATHS)
+                .name("Dependency-Check JSON report path")
+                .description("path to the 'dependency-check-report.json' file")
+                .defaultValue(DependencyCheckConstants.JSON_REPORT_PATH_DEFAULT)
+                .build(),
+            PropertyDefinition
+                .builder(DependencyCheckConstants.HTML_REPORT_PATH_PROPERTY)
+                .onQualifiers(Qualifiers.PROJECT)
+                .subCategory(DependencyCheckConstants.SUB_CATEGORY_PATHS)
+                .name("Dependency-Check HTML report path")
+                .description("path to the 'dependency-check-report.html' file")
+                .defaultValue(DependencyCheckConstants.HTML_REPORT_PATH_DEFAULT)
+                .build(),
+            PropertyDefinition
+                .builder(DependencyCheckConstants.SEVERITY_BLOCKER)
+                .onQualifiers(Qualifiers.PROJECT)
+                .subCategory(DependencyCheckConstants.SUB_CATEGORY_SEVERITIES)
+                .name("Blocker")
+                .description("Minimum score for blocker issues or -1 to deactivate blocker issues.")
+                .defaultValue("9.0")
+                .type(PropertyType.FLOAT)
+                .build(),
+            PropertyDefinition
+                .builder(DependencyCheckConstants.SEVERITY_CRITICAL)
+                .onQualifiers(Qualifiers.PROJECT)
+                .subCategory(DependencyCheckConstants.SUB_CATEGORY_SEVERITIES)
+                .name("Critical")
+                .description("Minimum score for critical issues or -1 to deactivate critical issues.")
+                .defaultValue(Float.toString(DependencyCheckConstants.SEVERITY_CRITICAL_DEFAULT))
+                .type(PropertyType.FLOAT)
+                .build(),
+            PropertyDefinition
+                .builder(DependencyCheckConstants.SEVERITY_MAJOR)
+                .onQualifiers(Qualifiers.PROJECT)
+                .subCategory(DependencyCheckConstants.SUB_CATEGORY_SEVERITIES)
+                .name("Major")
+                .description("Minimum score for major issues or -1 to deactivate major issues.")
+                .defaultValue(Float.toString(DependencyCheckConstants.SEVERITY_MAJOR_DEFAULT))
+                .type(PropertyType.FLOAT)
+                .build(),
+            PropertyDefinition
+                .builder(DependencyCheckConstants.SEVERITY_MINOR)
+                .onQualifiers(Qualifiers.PROJECT)
+                .subCategory(DependencyCheckConstants.SUB_CATEGORY_SEVERITIES)
+                .name("Minor")
+                .description("Minimum score for minor issues or -1 to deactivate minor issues.")
+                .defaultValue(Float.toString(DependencyCheckConstants.SEVERITY_MINOR_DEFAULT))
+                .type(PropertyType.FLOAT)
+                .build(),
+            PropertyDefinition
+                .builder(DependencyCheckConstants.SUMMARIZE_PROPERTY)
+                .onQualifiers(Qualifiers.PROJECT)
+                .subCategory(DependencyCheckConstants.SUB_CATEGORY_GENERAL)
+                .name("Summarize")
+                .description("When enabled we summarize all vulnerabilities per dependency.")
+                .defaultValue(Boolean.toString(DependencyCheckConstants.SUMMARIZE_PROPERTY_DEFAULT))
+                .type(PropertyType.BOOLEAN)
+                .build(),
+            PropertyDefinition
+                .builder(DependencyCheckConstants.SKIP_PROPERTY)
+                .onQualifiers(Qualifiers.PROJECT)
+                .subCategory(DependencyCheckConstants.SUB_CATEGORY_GENERAL)
+                .name("Skip")
+                .description("When enabled we skip this plugin.")
+                .defaultValue(Boolean.toString(DependencyCheckConstants.SKIP_PROPERTY_DEFAULT))
+                .type(PropertyType.BOOLEAN)
+                .build(),
+            PropertyDefinition
+                .builder(DependencyCheckConstants.SECURITY_HOTSPOT)
+                .onQualifiers(Qualifiers.PROJECT)
+                .subCategory(DependencyCheckConstants.SUB_CATEGORY_GENERAL)
+                .name("Security-Hotspot")
+                .description("When enabled all SonarQube issues are flagged as Security-Hotspot.")
+                .defaultValue(Boolean.toString(DependencyCheckConstants.SECURITY_HOTSPOT_DEFAULT))
+                .type(PropertyType.BOOLEAN)
+                .build()
         );
     }
 }

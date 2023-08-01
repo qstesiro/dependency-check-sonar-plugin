@@ -1,0 +1,14 @@
+# 获取报告
+{
+    curl http://localhost:9000/api/measures/search \
+         -u 'admin:iwpyuh' \
+         -d 'projectKeys=console.wuxing-cs.v' \
+         -d 'metricKeys=report' \
+         -G | jq
+
+    curl http://localhost:9000/api/measures/search \
+         -u 'admin:iwpyuh' \
+         -d 'projectKeys=console.wuxing-cs.v' \
+         -d 'metricKeys=hmm_demo' \
+         -G | jq
+}

@@ -40,7 +40,18 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import edu.umd.cs.findbugs.annotations.NonNull;
 import edu.umd.cs.findbugs.annotations.Nullable;
 
-@JsonIgnoreProperties({"isVirtual", "sha256", "description", "projectReferences", "license", "relatedDependencies", "suppressedVulnerabilities", "suppressedVulnerabilityIds"})
+@JsonIgnoreProperties(
+    {
+        "isVirtual",
+        "sha256",
+        "description",
+        "projectReferences",
+        "license",
+        "relatedDependencies",
+        "suppressedVulnerabilities",
+        "suppressedVulnerabilityIds"
+    }
+)
 public class Dependency {
 
     private final String fileName;
@@ -53,17 +64,29 @@ public class Dependency {
     private final Collection<Identifier> vulnerabilityIds;
 
     @JsonCreator
-    public Dependency(@JsonProperty(value = "fileName", required = true) @NonNull String fileName,
-                      @JsonProperty(value = "filePath", required = true) @NonNull String filePath,
-                      @JsonProperty(value = "md5") @Nullable String md5Hash,
-                      @JsonProperty(value = "sha1") @Nullable String sha1Hash,
-                      @JsonProperty(value = "evidenceCollected") @JsonDeserialize(using = EvidenceDeserializer.class ) Map<String, List<Evidence>> evidenceCollected,
-                      @JsonProperty(value = "vulnerabilities") @JsonDeserialize(using = VulnerabilitiesDeserializer.class) List<Vulnerability> vulnerabilities,
-                      // For JSON
-                      @JsonProperty(value = "packages") @Nullable Collection<Identifier> packages,
-                      @JsonProperty(value = "vulnerabilityIds") @Nullable Collection<Identifier> vulnerabilityIds,
-                      // For XML
-                      @JsonProperty(value = "identifiers") @JsonDeserialize(using = IdentifierDeserializer.class ) @Nullable Map<String, Collection<Identifier>> identifiers) {
+    public Dependency(
+        @JsonProperty(value = "fileName", required = true)
+        @NonNull String fileName,
+        @JsonProperty(value = "filePath", required = true)
+        @NonNull String filePath,
+        @JsonProperty(value = "md5")
+        @Nullable String md5Hash,
+        @JsonProperty(value = "sha1")
+        @Nullable String sha1Hash,
+        @JsonProperty(value = "evidenceCollected")
+        @JsonDeserialize(using = EvidenceDeserializer.class)
+        Map<String, List<Evidence>> evidenceCollected,
+        @JsonProperty(value = "vulnerabilities")
+        @JsonDeserialize(using = VulnerabilitiesDeserializer.class)
+        List<Vulnerability> vulnerabilities,
+        // For JSON
+        @JsonProperty(value = "packages") @Nullable Collection<Identifier> packages,
+        @JsonProperty(value = "vulnerabilityIds") @Nullable Collection<Identifier> vulnerabilityIds,
+        // For XML
+        @JsonProperty(value = "identifiers")
+        @JsonDeserialize(using = IdentifierDeserializer.class)
+        @Nullable Map<String, Collection<Identifier>> identifiers
+    ) {
         this.fileName = fileName;
         this.filePath = filePath;
         this.md5 = md5Hash;
@@ -74,7 +97,9 @@ public class Dependency {
         if (packages != null) {
             packagesComplete.addAll(packages);
         }
-        if (identifiers != null && !identifiers.isEmpty() && identifiers.containsKey("package")) {
+        if (identifiers != null &&
+            !identifiers.isEmpty() &&
+            identifiers.containsKey("package")) {
             packagesComplete.addAll(identifiers.get("package"));
         }
         this.packages = packagesComplete;
@@ -82,7 +107,9 @@ public class Dependency {
         if (vulnerabilityIds != null) {
             vulnerabilityIdsComplete.addAll(vulnerabilityIds);
         }
-        if (identifiers != null && !identifiers.isEmpty() && identifiers.containsKey("vulnerabilityIds")) {
+        if (identifiers != null &&
+            !identifiers.isEmpty() &&
+            identifiers.containsKey("vulnerabilityIds")) {
             vulnerabilityIdsComplete.addAll(identifiers.get("vulnerabilityIds"));
         }
         this.vulnerabilityIds = vulnerabilityIdsComplete;
@@ -113,7 +140,9 @@ public class Dependency {
     }
 
     public void sortVulnerabilityBycvssScore(Configuration config) {
-        final Comparator<Vulnerability> comp = (vul1, vul2) -> Float.compare( vul1.getCvssScore(config), vul2.getCvssScore(config));
+        final Comparator<Vulnerability> comp = (vul1, vul2) -> {
+            return Float.compare(vul1.getCvssScore(config), vul2.getCvssScore(config));
+        };
         Collections.sort(this.vulnerabilities, comp.reversed());
     }
 
@@ -136,7 +165,8 @@ public class Dependency {
 
     public boolean isJavaScriptDependency() {
         for (Identifier identifier : getPackages()) {
-            if (Identifier.isNPMPackage(identifier) || Identifier.isJavaScriptPackage(identifier)) {
+            if (Identifier.isNPMPackage(identifier) ||
+                Identifier.isJavaScriptPackage(identifier)) {
                 return true;
             }
         }

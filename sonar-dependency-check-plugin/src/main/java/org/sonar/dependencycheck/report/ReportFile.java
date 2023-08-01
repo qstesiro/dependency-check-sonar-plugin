@@ -32,6 +32,7 @@ import edu.umd.cs.findbugs.annotations.CheckForNull;
 import edu.umd.cs.findbugs.annotations.Nullable;
 
 public abstract class ReportFile {
+
     private static final Logger LOGGER = Loggers.get(ReportFile.class);
 
     protected final ReportFormat reportFormat;
@@ -52,7 +53,10 @@ public abstract class ReportFile {
     protected static File checkReport(@Nullable File report, ReportFormat reportFormat, String property) {
         if (report != null) {
             if (!report.exists()) {
-                LOGGER.info("Dependency-Check {} report does not exists. Please check property {}:{}", reportFormat, property, report.getAbsolutePath());
+                LOGGER.info(
+                    "Dependency-Check {} report does not exists. Please check property {}:{}",
+                    reportFormat, property, report.getAbsolutePath()
+                );
                 return null;
             }
             if (!report.isFile()) {

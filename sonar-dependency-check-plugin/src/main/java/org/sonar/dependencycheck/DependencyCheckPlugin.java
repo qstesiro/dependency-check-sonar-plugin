@@ -33,14 +33,17 @@ public final class DependencyCheckPlugin implements Plugin {
 
     @Override
     public void define(Context context) {
-        context.addExtensions(Arrays.asList(
+        context.addExtensions(
+            Arrays.asList(
                 DependencyCheckSensor.class,
                 DependencyCheckMetrics.class,
                 DependencyCheckMeasureComputer.class,
                 NeutralProfile.class,
                 NeutralLanguage.class,
                 KnownCveRuleDefinition.class,
-                DependencyCheckReportPage.class));
+                DependencyCheckReportPage.class
+            )
+        );
         context.addExtensions(DependencyCheckConfiguration.getPropertyDefinitions());
     }
 }

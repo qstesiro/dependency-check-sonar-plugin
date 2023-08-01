@@ -1,22 +1,22 @@
 /*
- * Dependency-Check Plugin for SonarQube
- * Copyright (C) 2015-2020 dependency-check
- * philipp.dallig@gmail.com
- *
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
- * License as published by the Free Software Foundation; either
- * version 3 of the License, or (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Lesser General Public License for more details.
- *
- * You should have received a copy of the GNU Lesser General Public License
- * along with this program; if not, write to the Free Software Foundation,
- * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
- */
+  * Dependency-Check Plugin for SonarQube
+  * Copyright (C) 2015-2020 dependency-check
+  * philipp.dallig@gmail.com
+  *
+  * This program is free software; you can redistribute it and/or
+  * modify it under the terms of the GNU Lesser General Public
+  * License as published by the Free Software Foundation; either
+  * version 3 of the License, or (at your option) any later version.
+  *
+  * This program is distributed in the hope that it will be useful,
+  * but WITHOUT ANY WARRANTY; without even the implied warranty of
+  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+  * Lesser General Public License for more details.
+  *
+  * You should have received a copy of the GNU Lesser General Public License
+  * along with this program; if not, write to the Free Software Foundation,
+  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+  */
 package org.sonar.dependencycheck;
 
 import java.io.FileNotFoundException;
@@ -58,81 +58,14 @@ public class DependencyCheckSensor implements ProjectSensor {
     private final PathResolver pathResolver;
     private final AnalysisWarnings analysisWarnings;
 
-    public DependencyCheckSensor(FileSystem fileSystem, PathResolver pathResolver, @Nullable AnalysisWarnings analysisWarnings) {
+    public DependencyCheckSensor(
+        FileSystem fileSystem,
+        PathResolver pathResolver,
+        @Nullable AnalysisWarnings analysisWarnings
+    ) {
         this.fileSystem = fileSystem;
         this.pathResolver = pathResolver;
         this.analysisWarnings = analysisWarnings;
-    }
-
-    private Optional<Analysis> parseAnalysis(SensorContext context) {
-        LOGGER.info("Using JSON-Reportparser");
-        try {
-            JsonReportFile report = JsonReportFile.getJsonReport(context.config(), fileSystem, pathResolver);
-            return Optional.of(JsonReportParserHelper.parse(report.getInputStream()));
-        } catch (FileNotFoundException e) {
-            LOGGER.info("JSON-Analysis skipped/aborted due to missing report file");
-            LOGGER.debug(e.getMessage(), e);
-        } catch (ReportParserException e) {
-            LOGGER.warn("JSON-Analysis aborted");
-            LOGGER.debug(e.getMessage(), e);
-        } catch (IOException e) {
-            LOGGER.warn("JSON-Analysis aborted due to: IO Errors", e);
-        }
-        LOGGER.info("Using XML-Reportparser");
-        XmlReportFile report;
-        try {
-            report = XmlReportFile.getXmlReport(context.config(), fileSystem, pathResolver);
-            return Optional.of(XMLReportParserHelper.parse(report.getInputStream()));
-        } catch (FileNotFoundException e) {
-            LOGGER.info("XML-Analysis skipped/aborted due to missing report file");
-            LOGGER.debug(e.getMessage(), e);
-        } catch (ReportParserException e) {
-            LOGGER.warn("XML-Analysis aborted due to: Mandatory elements are missing. Plugin is compatible to {}", XSD);
-            LOGGER.debug(e.getMessage(), e);
-        } catch (IOException e) {
-            LOGGER.warn("XML-Analysis aborted due to: IO Errors", e);
-        }
-        return Optional.empty();
-    }
-
-    private void uploadHTMLReport(SensorContext context) {
-        try {
-            HtmlReportFile htmlReportFile = HtmlReportFile.getHtmlReport(context.config(), fileSystem, pathResolver);
-            String htmlReport = htmlReportFile.getReportContent();
-            if (htmlReport != null) {
-                LOGGER.info("Upload Dependency-Check HTML-Report");
-                context.<String>newMeasure().forMetric(DependencyCheckMetrics.REPORT).on(context.project())
-                        .withValue(htmlReport).save();
-            }
-        } catch (FileNotFoundException e) {
-            LOGGER.info(e.getMessage());
-            LOGGER.debug(e.getMessage(), e);
-        }
-    }
-
-    private void addWarnings(Analysis analysis) {
-        Optional<List<AnalysisException>> exceptions = analysis.getScanInfo().getExceptions();
-        if (exceptions.isPresent()) {
-            for (AnalysisException exception : exceptions.get()) {
-                addWarnings(exception);
-            }
-        }
-    }
-
-    private void addWarnings(@Nullable Throwable cause) {
-        if (cause != null) {
-            String message = cause.getMessage();
-            if (StringUtils.isNotBlank(message)) {
-                analysisWarnings.addUnique(SENSOR_NAME + " - " + message);
-            }
-            addWarnings(cause.getCause());
-        }
-    }
-
-
-    @Override
-    public String toString() {
-        return SENSOR_NAME;
     }
 
     @Override
@@ -158,5 +91,87 @@ public class DependencyCheckSensor implements ProjectSensor {
             uploadHTMLReport(sensorContext);
         }
         profiler.stopInfo();
+    }
+
+    @Override
+    public String toString() {
+        return SENSOR_NAME;
+    }
+
+    private Optional<Analysis> parseAnalysis(SensorContext context) {
+        LOGGER.info("Using JSON-Reportparser");
+        try {
+            JsonReportFile report = JsonReportFile.getJsonReport(
+                context.config(), fileSystem, pathResolver
+            );
+            return Optional.of(JsonReportParserHelper.parse(report.getInputStream()));
+        } catch (FileNotFoundException e) {
+            LOGGER.info("JSON-Analysis skipped/aborted due to missing report file");
+            LOGGER.debug(e.getMessage(), e);
+        } catch (ReportParserException e) {
+            LOGGER.warn("JSON-Analysis aborted");
+            LOGGER.debug(e.getMessage(), e);
+        } catch (IOException e) {
+            LOGGER.warn("JSON-Analysis aborted due to: IO Errors", e);
+        }
+        LOGGER.info("Using XML-Reportparser");
+        XmlReportFile report;
+        try {
+            report = XmlReportFile.getXmlReport(
+                context.config(), fileSystem, pathResolver
+            );
+            return Optional.of(XMLReportParserHelper.parse(report.getInputStream()));
+        } catch (FileNotFoundException e) {
+            LOGGER.info("XML-Analysis skipped/aborted due to missing report file");
+            LOGGER.debug(e.getMessage(), e);
+        } catch (ReportParserException e) {
+            LOGGER.warn("XML-Analysis aborted due to: Mandatory elements are missing. Plugin is compatible to {}",
+                        XSD);
+            LOGGER.debug(e.getMessage(), e);
+        } catch (IOException e) {
+            LOGGER.warn("XML-Analysis aborted due to: IO Errors", e);
+        }
+        return Optional.empty();
+    }
+
+    private void uploadHTMLReport(SensorContext context) {
+        try {
+            HtmlReportFile htmlReportFile = HtmlReportFile.getHtmlReport(
+                context.config(), fileSystem, pathResolver
+            );
+            String htmlReport = htmlReportFile.getReportContent();
+            if (htmlReport != null) {
+                LOGGER.info("Upload Dependency-Check HTML-Report");
+                context.<String>newMeasure()
+                    .forMetric(DependencyCheckMetrics.REPORT).on(context.project())
+                    .withValue(htmlReport).save();
+                // ???
+                context.<String>newMeasure()
+                    .forMetric(DependencyCheckMetrics.HMM_DEMO).on(context.project())
+                    .withValue("hmm-demo").save();
+            }
+        } catch (FileNotFoundException e) {
+            LOGGER.info(e.getMessage());
+            LOGGER.debug(e.getMessage(), e);
+        }
+    }
+
+    private void addWarnings(Analysis analysis) {
+        Optional<List<AnalysisException>> exceptions = analysis.getScanInfo().getExceptions();
+        if (exceptions.isPresent()) {
+            for (AnalysisException exception : exceptions.get()) {
+                addWarnings(exception);
+            }
+        }
+    }
+
+    private void addWarnings(@Nullable Throwable cause) {
+        if (cause != null) {
+            String message = cause.getMessage();
+            if (StringUtils.isNotBlank(message)) {
+                analysisWarnings.addUnique(SENSOR_NAME + " - " + message);
+            }
+            addWarnings(cause.getCause());
+        }
     }
 }

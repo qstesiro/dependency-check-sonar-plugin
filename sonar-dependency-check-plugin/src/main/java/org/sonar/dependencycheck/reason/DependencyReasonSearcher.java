@@ -51,7 +51,9 @@ public class DependencyReasonSearcher {
     public DependencyReasonSearcher(SensorContext context) {
         this.projectMetric = new DependencyCheckMetric(context.project());
         this.dependencyReasons = new LinkedList<>();
-        Iterable<InputFile> poms = context.fileSystem().inputFiles(context.fileSystem().predicates().matchesPathPattern("**/pom.xml"));
+        Iterable<InputFile> poms = context.fileSystem().inputFiles(
+            context.fileSystem().predicates().matchesPathPattern("**/pom.xml")
+        );
         for (InputFile pom : poms) {
             DependencyReason pomReason = new MavenDependencyReason(pom);
             if (pomReason.isReasonable()) {
@@ -62,7 +64,9 @@ public class DependencyReasonSearcher {
             }
         }
         String[] gradlePathPatterns = {"**/*.gradle", "**/*.gradle.kts"};
-        Iterable<InputFile> buildGradles = context.fileSystem().inputFiles(context.fileSystem().predicates().matchesPathPatterns(gradlePathPatterns));
+        Iterable<InputFile> buildGradles = context.fileSystem().inputFiles(
+            context.fileSystem().predicates().matchesPathPatterns(gradlePathPatterns)
+        );
         for (InputFile buildGradle : buildGradles) {
             DependencyReason gradleReason = new GradleDependencyReason(buildGradle);
             if (gradleReason.isReasonable()) {
@@ -73,7 +77,9 @@ public class DependencyReasonSearcher {
             }
         }
         String[] npmPathPatterns = {"**/package-lock.json"};
-        Iterable<InputFile> packageLocks = context.fileSystem().inputFiles(context.fileSystem().predicates().matchesPathPatterns(npmPathPatterns));
+        Iterable<InputFile> packageLocks = context.fileSystem().inputFiles(
+            context.fileSystem().predicates().matchesPathPatterns(npmPathPatterns)
+        );
         for (InputFile packageLock : packageLocks) {
             DependencyReason npmReason = new NPMDependencyReason(packageLock);
             if (npmReason.isReasonable()) {
@@ -99,20 +105,34 @@ public class DependencyReasonSearcher {
      */
     @NonNull
     private Optional<DependencyReason> getBestDependencyReason(Dependency dependency) {
-        LOGGER.debug("Get the best DependencyReason out of {} for {}", dependencyReasons.size(), dependency.getFileName());
+        LOGGER.debug(
+            "Get the best DependencyReason out of {} for {}",
+            dependencyReasons.size(),
+            dependency.getFileName()
+        );
         // Prefer root configuration file
-        Optional<DependencyReason> dependencyReasonWinner = DependencyCheckUtils.getBestDependencyReason(dependency, dependencyReasons);
-        dependencyReasonWinner.ifPresent(dependencyReason -> LOGGER.debug("DependencyReasonWinner: " + dependencyReason.getInputComponent()));
+        Optional<DependencyReason> dependencyReasonWinner = DependencyCheckUtils.getBestDependencyReason(
+            dependency, dependencyReasons
+        );
+        dependencyReasonWinner.ifPresent(
+            dependencyReason -> {
+                LOGGER.debug("DependencyReasonWinner: " + dependencyReason.getInputComponent());
+            }
+        );
         return dependencyReasonWinner;
     }
 
     public void addDependenciesToInputComponents(@NonNull Analysis analysis,@NonNull SensorContext context) {
-        if (analysis.getDependencies() == null || analysis.getDependencies().isEmpty()) {
+        if (analysis.getDependencies() == null ||
+            analysis.getDependencies().isEmpty()) {
             LOGGER.info("Analyse doesn't report any Dependencies");
             return;
         }
         if (dependencyReasons.isEmpty()) {
-            LOGGER.info("No project configuration file, e.g. pom.xml, *.gradle, *.gradle.kts, package-lock.json found, therefore it isn't possible to correctly link dependencies with files.");
+            LOGGER.info(
+                "No project configuration file, e.g. pom.xml, *.gradle, *.gradle.kts, package-lock.json found, " +
+                "therefore it isn't possible to correctly link dependencies with files."
+            );
             linkIssues(analysis.getDependencies(), context);
             LOGGER.debug("Saving Metrics to project {}", projectMetric.toString());
             projectMetric.saveMeasures(context);
@@ -154,8 +174,10 @@ public class DependencyReasonSearcher {
         }
     }
 
-    private void linkDependencyToDependencyReasons(@NonNull Dependency dependency, DependencyReason dependencyReason,
-            @NonNull SensorContext context) {
+    private void linkDependencyToDependencyReasons(
+        @NonNull Dependency dependency, DependencyReason dependencyReason,
+        @NonNull SensorContext context
+    ) {
         dependencyReason.getMetrics().increaseTotalDependencies(1);
         if (!dependency.getVulnerabilities().isEmpty()) {
             dependencyReason.getMetrics().increaseVulnerabilityCount(dependency.getVulnerabilities().size());
@@ -173,18 +195,25 @@ public class DependencyReasonSearcher {
     }
 
     public void addIssueToProject(SensorContext context, Dependency dependency, Vulnerability vulnerability) {
-        Severity severity = DependencyCheckUtils.cvssToSonarQubeSeverity(vulnerability.getCvssScore(context.config()), context.config());
+        Severity severity = DependencyCheckUtils.cvssToSonarQubeSeverity(
+            vulnerability.getCvssScore(context.config()), context.config()
+        );
         NewIssue sonarIssue = context.newIssue();
-
         NewIssueLocation location = sonarIssue.newLocation()
             .on(context.project())
-            .message(DependencyCheckUtils.formatDescription(dependency, vulnerability, context.config()));
-
-        sonarIssue
-            .at(location)
-            .forRule(RuleKey.of(DependencyCheckConstants.REPOSITORY_KEY, DependencyCheckUtils.getRuleKey(context.config())))
-            .overrideSeverity(severity)
-            .save();
+            .message(
+                DependencyCheckUtils.formatDescription(
+                    dependency,
+                    vulnerability,
+                    context.config()
+                )
+            );
+        sonarIssue.at(location).forRule(
+            RuleKey.of(
+                DependencyCheckConstants.REPOSITORY_KEY,
+                DependencyCheckUtils.getRuleKey(context.config())
+            )
+        ).overrideSeverity(severity).save();
         projectMetric.incrementCount(severity);
     }
 
@@ -192,19 +221,23 @@ public class DependencyReasonSearcher {
         dependency.sortVulnerabilityBycvssScore(context.config());
         List<Vulnerability> vulnerabilities = dependency.getVulnerabilities();
         Vulnerability highestVulnerability = vulnerabilities.get(0);
-        Severity severity = DependencyCheckUtils.cvssToSonarQubeSeverity(highestVulnerability.getCvssScore(context.config()), context.config());
-
+        Severity severity = DependencyCheckUtils.cvssToSonarQubeSeverity(
+            highestVulnerability.getCvssScore(context.config()), context.config()
+        );
         NewIssue sonarIssue = context.newIssue();
-
         NewIssueLocation location = sonarIssue.newLocation()
             .on(context.project())
-            .message(DependencyCheckUtils.formatDescription(dependency, vulnerabilities, highestVulnerability, context.config()));
-
-        sonarIssue
-            .at(location)
-            .forRule(RuleKey.of(DependencyCheckConstants.REPOSITORY_KEY, DependencyCheckUtils.getRuleKey(context.config())))
-            .overrideSeverity(severity)
-            .save();
+            .message(
+                DependencyCheckUtils.formatDescription(
+                    dependency, vulnerabilities, highestVulnerability, context.config()
+                )
+            );
+        sonarIssue.at(location).forRule(
+            RuleKey.of(
+                DependencyCheckConstants.REPOSITORY_KEY,
+                DependencyCheckUtils.getRuleKey(context.config())
+            )
+        ).overrideSeverity(severity).save();
         projectMetric.incrementCount(severity);
     }
 }

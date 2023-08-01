@@ -1,148 +1,151 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-    <modelVersion>4.0.0</modelVersion>
-    <parent>
-        <groupId>org.sonarsource.parent</groupId>
-        <artifactId>parent</artifactId>
-        <version>54</version>
-    </parent>
-    <groupId>org.sonarsource.owasp</groupId>
-    <artifactId>sonar-dependency-check</artifactId>
-    <version>2.0.8</version>
-    <packaging>pom</packaging>
-    <name>Dependency-Check for SonarQube</name>
-    <description>Integrates Dependency-Check reports into SonarQube</description>
-    <inceptionYear>2015</inceptionYear>
 
-    <properties>
-        <license.owner>dependency-check</license.owner>
-        <license.mailto>philipp.dallig@gmail.com</license.mailto>
+  <modelVersion>4.0.0</modelVersion>
 
-        <sonar.host.url>https://sonarcloud.io</sonar.host.url>
-        <sonar.projectKey>dependency-check_dependency-check-sonar-plugin</sonar.projectKey>
-        <sonar.organization>dependency-check</sonar.organization>
-        <sonar.moduleKey>${project.artifactId}</sonar.moduleKey>
-    </properties>
+  <parent>
+    <groupId>org.sonarsource.parent</groupId>
+    <artifactId>parent</artifactId>
+    <version>54</version>
+  </parent>
 
-    <organization>
-        <name>OWASP</name>
-        <url>http://www.owasp.org</url>
-    </organization>
+  <groupId>org.sonarsource.owasp</groupId>
+  <artifactId>sonar-dependency-check</artifactId>
+  <version>2.0.8</version>
+  <packaging>pom</packaging>
+  <name>Dependency-Check for SonarQube</name>
+  <description>Integrates Dependency-Check reports into SonarQube</description>
+  <inceptionYear>2015</inceptionYear>
 
-    <licenses>
-        <license>
-            <name>GNU LGPL 3</name>
-            <url>http://www.gnu.org/licenses/lgpl.txt</url>
-            <distribution>repo</distribution>
-        </license>
-    </licenses>
+  <properties>
+    <license.owner>dependency-check</license.owner>
+    <license.mailto>philipp.dallig@gmail.com</license.mailto>
+    <sonar.host.url>https://sonarcloud.io</sonar.host.url>
+    <sonar.projectKey>dependency-check_dependency-check-sonar-plugin</sonar.projectKey>
+    <sonar.organization>dependency-check</sonar.organization>
+    <sonar.moduleKey>${project.artifactId}</sonar.moduleKey>
+  </properties>
 
-    <developers>
-        <developer>
-            <name>Steve Springett</name>
-            <email>steve.springett@owasp.org</email>
-            <url>http://www.stevespringett.com</url>
-        </developer>
-        <developer>
-            <name>Philipp Dallig</name>
-            <email>philipp.dallig@gmail.com</email>
-            <id>Reamer</id>
-            <timezone>+1</timezone>
-        </developer>
-    </developers>
+  <organization>
+    <name>OWASP</name>
+    <url>http://www.owasp.org</url>
+  </organization>
 
-    <scm>
-      <connection>scm:git:https://github.com/dependency-check/dependency-check-sonar-plugin</connection>
-      <developerConnection>scm:git:https://github.com/dependency-check/dependency-check-sonar-plugin</developerConnection>
-      <url>https://github.com/dependency-check/dependency-check-sonar-plugin</url>
-      <tag>2.0.8</tag>
-    </scm>
+  <licenses>
+    <license>
+      <name>GNU LGPL 3</name>
+      <url>http://www.gnu.org/licenses/lgpl.txt</url>
+      <distribution>repo</distribution>
+    </license>
+  </licenses>
 
-    <issueManagement>
-      <system>GitHub</system>
-      <url>https://github.com/dependency-check/dependency-check-sonar-plugin/issues</url>
-    </issueManagement>
+  <developers>
+    <developer>
+      <name>Steve Springett</name>
+      <email>steve.springett@owasp.org</email>
+      <url>http://www.stevespringett.com</url>
+    </developer>
+    <developer>
+      <name>Philipp Dallig</name>
+      <email>philipp.dallig@gmail.com</email>
+      <id>Reamer</id>
+      <timezone>+1</timezone>
+    </developer>
+  </developers>
 
-    <ciManagement>
-      <system>Travis CI</system>
-      <url>https://travis-ci.org/dependency-check/dependency-check-sonar-plugin</url>
-    </ciManagement>
+  <scm>
+    <connection>scm:git:https://github.com/dependency-check/dependency-check-sonar-plugin</connection>
+    <developerConnection>scm:git:https://github.com/dependency-check/dependency-check-sonar-plugin</developerConnection>
+    <url>https://github.com/dependency-check/dependency-check-sonar-plugin</url>
+    <tag>2.0.8</tag>
+  </scm>
 
-    <modules>
-        <module>sonar-dependency-check-plugin</module>
-    </modules>
+  <issueManagement>
+    <system>GitHub</system>
+    <url>https://github.com/dependency-check/dependency-check-sonar-plugin/issues</url>
+  </issueManagement>
 
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>org.jacoco</groupId>
-                <artifactId>jacoco-maven-plugin</artifactId>
-                <version>0.8.5</version>
-                <executions>
-                    <execution>
-                        <id>pre-unit-test</id>
-                        <goals>
-                            <goal>prepare-agent</goal>
-                        </goals>
-                    </execution>
-                    <execution>
-                        <id>after-unit-test</id>
-                        <goals>
-                            <goal>report</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-release-plugin</artifactId>
-                <version>2.5.3</version>
-                <configuration>
-                    <autoVersionSubmodules>true</autoVersionSubmodules>
-                    <useReleaseProfile>false</useReleaseProfile>
-                    <releaseProfiles>release</releaseProfiles>
-                    <localCheckout>true</localCheckout>
-                    <mavenExecutorId>forked-path</mavenExecutorId>
-                    <pushChanges>true</pushChanges>
-                    <preparationGoals>clean install</preparationGoals>
-                    <tagNameFormat>@{project.version}</tagNameFormat>
-                    <arguments>-Prelease</arguments>
-                </configuration>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-javadoc-plugin</artifactId>
-                <configuration>
-                    <source>8</source>
-                </configuration>
-            </plugin>
-        </plugins>
-        <pluginManagement>
-            <plugins>
-                <!-- Skip Deploy plugin as we do not have distributionManagement -->
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-deploy-plugin</artifactId>
-                    <configuration>
-                        <skip>true</skip>
-                    </configuration>
-                </plugin>
-                <plugin>
-                    <groupId>de.jutzig</groupId>
-                    <artifactId>github-release-plugin</artifactId>
-                    <version>1.4.0</version>
-                    <configuration />
-                    <executions>
-                        <execution>
-                            <id>github</id>
-                            <phase>deploy</phase>
-                            <goals>
-                                <goal>release</goal>
-                            </goals>
-                        </execution>
-                    </executions>
-                </plugin>
-            </plugins>
-        </pluginManagement>
-    </build>
+  <ciManagement>
+    <system>Travis CI</system>
+    <url>https://travis-ci.org/dependency-check/dependency-check-sonar-plugin</url>
+  </ciManagement>
+
+  <modules>
+    <module>sonar-dependency-check-plugin</module>
+  </modules>
+
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.jacoco</groupId>
+        <artifactId>jacoco-maven-plugin</artifactId>
+        <version>0.8.5</version>
+        <executions>
+          <execution>
+            <id>pre-unit-test</id>
+            <goals>
+              <goal>prepare-agent</goal>
+            </goals>
+          </execution>
+          <execution>
+            <id>after-unit-test</id>
+            <goals>
+              <goal>report</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-release-plugin</artifactId>
+        <version>2.5.3</version>
+        <configuration>
+          <autoVersionSubmodules>true</autoVersionSubmodules>
+          <useReleaseProfile>false</useReleaseProfile>
+          <releaseProfiles>release</releaseProfiles>
+          <localCheckout>true</localCheckout>
+          <mavenExecutorId>forked-path</mavenExecutorId>
+          <pushChanges>true</pushChanges>
+          <preparationGoals>clean install</preparationGoals>
+          <tagNameFormat>@{project.version}</tagNameFormat>
+          <arguments>-Prelease</arguments>
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-javadoc-plugin</artifactId>
+        <configuration>
+          <source>8</source>
+        </configuration>
+      </plugin>
+    </plugins>
+    <pluginManagement>
+      <plugins>
+        <!-- Skip Deploy plugin as we do not have distributionManagement -->
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-deploy-plugin</artifactId>
+          <configuration>
+            <skip>true</skip>
+          </configuration>
+        </plugin>
+        <plugin>
+          <groupId>de.jutzig</groupId>
+          <artifactId>github-release-plugin</artifactId>
+          <version>1.4.0</version>
+          <configuration />
+          <executions>
+            <execution>
+              <id>github</id>
+              <phase>deploy</phase>
+              <goals>
+                <goal>release</goal>
+              </goals>
+            </execution>
+          </executions>
+        </plugin>
+      </plugins>
+    </pluginManagement>
+  </build>
+
 </project>

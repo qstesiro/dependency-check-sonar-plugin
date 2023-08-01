@@ -29,8 +29,14 @@ import org.sonar.dependencycheck.base.DependencyCheckConstants;
 
 public class HtmlReportFile extends ReportFile {
 
-    public static HtmlReportFile getHtmlReport(Configuration config, FileSystem fileSystem, PathResolver pathResolver) throws FileNotFoundException {
-        String path = config.get(DependencyCheckConstants.HTML_REPORT_PATH_PROPERTY).orElse(DependencyCheckConstants.HTML_REPORT_PATH_DEFAULT);
+    public static HtmlReportFile getHtmlReport(
+        Configuration config,
+        FileSystem fileSystem,
+        PathResolver pathResolver
+    ) throws FileNotFoundException {
+        String path = config
+            .get(DependencyCheckConstants.HTML_REPORT_PATH_PROPERTY)
+            .orElse(DependencyCheckConstants.HTML_REPORT_PATH_DEFAULT);
         File report = pathResolver.relativeFile(fileSystem.baseDir(), path);
         report = checkReport(report, ReportFormat.HTML, DependencyCheckConstants.HTML_REPORT_PATH_PROPERTY);
         if (report == null) {
