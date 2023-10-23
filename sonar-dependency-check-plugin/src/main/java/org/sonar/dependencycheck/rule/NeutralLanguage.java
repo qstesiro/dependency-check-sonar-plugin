@@ -38,7 +38,7 @@ public class NeutralLanguage extends AbstractLanguage {
 
     @Override
     public String[] getFileSuffixes() {
-        return new String[0];
+        return new String[0]; // 什么用法,不明白 ???
     }
 
 }

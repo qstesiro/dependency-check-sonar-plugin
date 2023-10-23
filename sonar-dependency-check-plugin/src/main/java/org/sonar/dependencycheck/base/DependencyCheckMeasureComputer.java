@@ -17,12 +17,13 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-
 package org.sonar.dependencycheck.base;
 
 import org.sonar.api.ce.measure.Component.Type;
 import org.sonar.api.ce.measure.Measure;
 import org.sonar.api.ce.measure.MeasureComputer;
+import org.sonar.api.utils.log.Logger;
+import org.sonar.api.utils.log.Loggers;
 
 /**
  * This implementation of {@link MeasureComputer} will aggregate the metrics
@@ -33,19 +34,23 @@ import org.sonar.api.ce.measure.MeasureComputer;
  */
 public class DependencyCheckMeasureComputer implements MeasureComputer {
 
+    private static final Logger LOGGER = Loggers.get(DependencyCheckMeasureComputer.class);
+
     @Override
     public MeasureComputerDefinition define(MeasureComputerDefinitionContext defContext) {
-        return defContext.newDefinitionBuilder()
-                .setOutputMetrics(DependencyCheckMetrics.CRITICAL_SEVERITY_VULNS.getKey(),
-                        DependencyCheckMetrics.HIGH_SEVERITY_VULNS.getKey(),
-                        DependencyCheckMetrics.MEDIUM_SEVERITY_VULNS.getKey(),
-                        DependencyCheckMetrics.LOW_SEVERITY_VULNS.getKey(),
-                        DependencyCheckMetrics.TOTAL_DEPENDENCIES.getKey(),
-                        DependencyCheckMetrics.VULNERABLE_DEPENDENCIES.getKey(),
-                        DependencyCheckMetrics.TOTAL_VULNERABILITIES.getKey(),
-                        DependencyCheckMetrics.INHERITED_RISK_SCORE.getKey(),
-                        DependencyCheckMetrics.VULNERABLE_COMPONENT_RATIO.getKey())
-                .build();
+        return defContext
+            .newDefinitionBuilder()
+            .setOutputMetrics(
+                DependencyCheckMetrics.CRITICAL_SEVERITY_VULNS.getKey(),
+                DependencyCheckMetrics.HIGH_SEVERITY_VULNS.getKey(),
+                DependencyCheckMetrics.MEDIUM_SEVERITY_VULNS.getKey(),
+                DependencyCheckMetrics.LOW_SEVERITY_VULNS.getKey(),
+                DependencyCheckMetrics.TOTAL_DEPENDENCIES.getKey(),
+                DependencyCheckMetrics.VULNERABLE_DEPENDENCIES.getKey(),
+                DependencyCheckMetrics.TOTAL_VULNERABILITIES.getKey(),
+                DependencyCheckMetrics.INHERITED_RISK_SCORE.getKey(),
+                DependencyCheckMetrics.VULNERABLE_COMPONENT_RATIO.getKey()
+            ).build();
     }
 
     @Override

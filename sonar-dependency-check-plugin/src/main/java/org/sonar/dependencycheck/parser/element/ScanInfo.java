@@ -38,8 +38,13 @@ public class ScanInfo {
     private final List<AnalysisException> exceptions;
 
     @JsonCreator
-    public ScanInfo(@JsonProperty(value = "engineVersion", required = true) @NonNull String engineVersion,
-                    @JsonProperty(value = "analysisExceptions") @JsonDeserialize(using = AnalysisExceptionDeserializer.class ) @Nullable List<AnalysisException> exceptions) {
+    public ScanInfo(
+        @JsonProperty(value = "engineVersion", required = true)
+        @NonNull String engineVersion,
+        @JsonProperty(value = "analysisExceptions")
+        @JsonDeserialize(using = AnalysisExceptionDeserializer.class)
+        @Nullable List<AnalysisException> exceptions
+    ) {
         this.engineVersion = engineVersion;
         this.exceptions = exceptions;
     }

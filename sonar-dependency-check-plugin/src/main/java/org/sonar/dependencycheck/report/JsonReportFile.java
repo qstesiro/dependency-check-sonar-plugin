@@ -29,10 +29,18 @@ import org.sonar.dependencycheck.base.DependencyCheckConstants;
 
 public class JsonReportFile extends ReportFile {
 
-    public static JsonReportFile getJsonReport(Configuration config, FileSystem fileSystem, PathResolver pathResolver) throws FileNotFoundException {
-        String path = config.get(DependencyCheckConstants.JSON_REPORT_PATH_PROPERTY).orElse(DependencyCheckConstants.JSON_REPORT_PATH_DEFAULT);
+    public static JsonReportFile getJsonReport(
+        Configuration config,
+        FileSystem fileSystem,
+        PathResolver pathResolver
+    ) throws FileNotFoundException {
+        String path = config.get(DependencyCheckConstants.JSON_REPORT_PATH_PROPERTY)
+            .orElse(DependencyCheckConstants.JSON_REPORT_PATH_DEFAULT);
         File report = pathResolver.relativeFile(fileSystem.baseDir(), path);
-        report = checkReport(report, ReportFormat.JSON, DependencyCheckConstants.JSON_REPORT_PATH_PROPERTY);
+        report = checkReport(
+            report, ReportFormat.JSON,
+            DependencyCheckConstants.JSON_REPORT_PATH_PROPERTY
+        );
         if (report == null) {
             throw new FileNotFoundException("JSON-Dependency-Check report does not exist.");
         }

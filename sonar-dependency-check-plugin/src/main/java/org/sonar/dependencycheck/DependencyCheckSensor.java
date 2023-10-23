@@ -1,22 +1,22 @@
 /*
- * Dependency-Check Plugin for SonarQube
- * Copyright (C) 2015-2020 dependency-check
- * philipp.dallig@gmail.com
- *
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
- * License as published by the Free Software Foundation; either
- * version 3 of the License, or (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Lesser General Public License for more details.
- *
- * You should have received a copy of the GNU Lesser General Public License
- * along with this program; if not, write to the Free Software Foundation,
- * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
- */
+  * Dependency-Check Plugin for SonarQube
+  * Copyright (C) 2015-2020 dependency-check
+  * philipp.dallig@gmail.com
+  *
+  * This program is free software; you can redistribute it and/or
+  * modify it under the terms of the GNU Lesser General Public
+  * License as published by the Free Software Foundation; either
+  * version 3 of the License, or (at your option) any later version.
+  *
+  * This program is distributed in the hope that it will be useful,
+  * but WITHOUT ANY WARRANTY; without even the implied warranty of
+  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+  * Lesser General Public License for more details.
+  *
+  * You should have received a copy of the GNU Lesser General Public License
+  * along with this program; if not, write to the Free Software Foundation,
+  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+  */
 package org.sonar.dependencycheck;
 
 import java.io.FileNotFoundException;
@@ -58,7 +58,11 @@ public class DependencyCheckSensor implements ProjectSensor {
     private final PathResolver pathResolver;
     private final AnalysisWarnings analysisWarnings;
 
-    public DependencyCheckSensor(FileSystem fileSystem, PathResolver pathResolver, @Nullable AnalysisWarnings analysisWarnings) {
+    public DependencyCheckSensor(
+        FileSystem fileSystem,
+        PathResolver pathResolver,
+        @Nullable AnalysisWarnings analysisWarnings
+    ) {
         this.fileSystem = fileSystem;
         this.pathResolver = pathResolver;
         this.analysisWarnings = analysisWarnings;
@@ -144,12 +148,6 @@ public class DependencyCheckSensor implements ProjectSensor {
         }
     }
 
-
-    @Override
-    public String toString() {
-        return SENSOR_NAME;
-    }
-
     @Override
     public void describe(SensorDescriptor sensorDescriptor) {
         sensorDescriptor.name(SENSOR_NAME);
@@ -174,5 +172,10 @@ public class DependencyCheckSensor implements ProjectSensor {
             uploadJSONReport(sensorContext);
         }
         profiler.stopInfo();
+    }
+
+    @Override
+    public String toString() {
+        return SENSOR_NAME;
     }
 }

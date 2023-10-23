@@ -32,16 +32,22 @@ import edu.umd.cs.findbugs.annotations.NonNull;
 
 @JsonIgnoreProperties({"reportSchema"})
 public class Analysis {
-
     private final ScanInfo scanInfo;
     private final ProjectInfo projectInfo;
     private final Collection<Dependency> dependencies;
 
     @JsonCreator
     public Analysis(
-        @JsonProperty(value = "scanInfo", required = true) @NonNull ScanInfo scanInfo,
-        @JsonProperty(value = "projectInfo") @Nullable ProjectInfo projectInfo,
-        @JsonProperty(value = "dependencies", required = true) @NonNull Collection<Dependency> dependencies) {
+        @JsonProperty(value = "scanInfo", required = true)
+        @NonNull
+        ScanInfo scanInfo,
+        @JsonProperty(value = "projectInfo")
+        @Nullable
+        ProjectInfo projectInfo,
+        @JsonProperty(value = "dependencies", required = true)
+        @NonNull
+        Collection<Dependency> dependencies
+    ) {
         this.scanInfo = scanInfo;
         this.projectInfo = projectInfo;
         this.dependencies = dependencies;

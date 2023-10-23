@@ -36,7 +36,7 @@ import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
 
 import edu.umd.cs.findbugs.annotations.Nullable;
 
-public class EvidenceDeserializer extends StdDeserializer<Map<String, List<Evidence>>>{
+public class EvidenceDeserializer extends StdDeserializer<Map<String, List<Evidence>>> {
 
     /**
      *
@@ -52,20 +52,21 @@ public class EvidenceDeserializer extends StdDeserializer<Map<String, List<Evide
     }
 
     @Override
-    public Map<String, List<Evidence>> deserialize(JsonParser jsonParser, DeserializationContext deserializationContext) throws IOException {
+    public Map<String, List<Evidence>> deserialize(
+        JsonParser jsonParser,
+        DeserializationContext deserializationContext
+    ) throws IOException {
         List<Evidence> evidences = new ArrayList<>();
         // empty evidenceCollected in XML
-        if (StringUtils.equals(jsonParser.getCurrentName(), "evidenceCollected") && JsonToken.VALUE_STRING.equals(jsonParser.getCurrentToken())) {
+        if (StringUtils.equals(jsonParser.getCurrentName(), "evidenceCollected") &&
+            JsonToken.VALUE_STRING.equals(jsonParser.getCurrentToken())) {
             return buildFinalEvidences(evidences);
         }
         while (!JsonToken.END_OBJECT.equals(jsonParser.nextToken())) {
             JsonToken jsonToken = jsonParser.currentToken();
-            // For JSON
-            if (JsonToken.START_ARRAY.equals(jsonToken)) {
+            if (JsonToken.START_ARRAY.equals(jsonToken)) { // For JSON
                 parseJson(jsonParser, evidences);
-            }
-            // For XML
-            else if(JsonToken.START_OBJECT.equals(jsonToken)){
+            } else if(JsonToken.START_OBJECT.equals(jsonToken)){ // For XML
                 String fieldName = jsonParser.getCurrentName();
                 if (StringUtils.equalsIgnoreCase("evidence", fieldName)) {
                     evidences.add(jsonParser.readValueAs(Evidence.class));

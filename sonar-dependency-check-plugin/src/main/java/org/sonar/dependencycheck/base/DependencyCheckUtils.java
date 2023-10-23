@@ -45,7 +45,13 @@ public final class DependencyCheckUtils {
     private DependencyCheckUtils() {
     }
 
-    public static Severity cvssToSonarQubeSeverity(Float cvssScore, Float blocker, Float critical, Float major, Float minor) {
+    public static Severity cvssToSonarQubeSeverity(
+        Float cvssScore,
+        Float blocker,
+        Float critical,
+        Float major,
+        Float minor
+    ) {
         if (blocker.floatValue() >= 0 && cvssScore.floatValue() >= blocker.doubleValue()) {
             return Severity.BLOCKER;
         } else if (critical.floatValue() >= 0 && cvssScore.floatValue() >= critical.floatValue()) {
@@ -60,25 +66,40 @@ public final class DependencyCheckUtils {
     }
 
     public static Severity cvssToSonarQubeSeverity(Float cvssScore, Configuration config) {
-        Float severityBlocker = config.getFloat(DependencyCheckConstants.SEVERITY_BLOCKER).orElse(DependencyCheckConstants.SEVERITY_BLOCKER_DEFAULT);
-        Float severityCritical = config.getFloat(DependencyCheckConstants.SEVERITY_CRITICAL).orElse(DependencyCheckConstants.SEVERITY_CRITICAL_DEFAULT);
-        Float severityMajor = config.getFloat(DependencyCheckConstants.SEVERITY_MAJOR).orElse(DependencyCheckConstants.SEVERITY_MAJOR_DEFAULT);
-        Float severityMinor = config.getFloat(DependencyCheckConstants.SEVERITY_MINOR).orElse(DependencyCheckConstants.SEVERITY_MINOR_DEFAULT);
-        return DependencyCheckUtils.cvssToSonarQubeSeverity(cvssScore, severityBlocker, severityCritical, severityMajor, severityMinor);
+        Float severityBlocker = config
+            .getFloat(DependencyCheckConstants.SEVERITY_BLOCKER)
+            .orElse(DependencyCheckConstants.SEVERITY_BLOCKER_DEFAULT);
+        Float severityCritical = config
+            .getFloat(DependencyCheckConstants.SEVERITY_CRITICAL)
+            .orElse(DependencyCheckConstants.SEVERITY_CRITICAL_DEFAULT);
+        Float severityMajor = config
+            .getFloat(DependencyCheckConstants.SEVERITY_MAJOR)
+            .orElse(DependencyCheckConstants.SEVERITY_MAJOR_DEFAULT);
+        Float severityMinor = config
+            .getFloat(DependencyCheckConstants.SEVERITY_MINOR)
+            .orElse(DependencyCheckConstants.SEVERITY_MINOR_DEFAULT);
+        return DependencyCheckUtils.cvssToSonarQubeSeverity(
+            cvssScore,
+            severityBlocker,
+            severityCritical,
+            severityMajor,
+            severityMinor
+        );
     }
 
     public static String getRuleKey(Configuration config) {
-        return config.getBoolean(DependencyCheckConstants.SECURITY_HOTSPOT)
-                .orElse(DependencyCheckConstants.SECURITY_HOTSPOT_DEFAULT)
-                        ? DependencyCheckConstants.RULE_KEY_WITH_SECURITY_HOTSPOT
-                        : DependencyCheckConstants.RULE_KEY;
+        return config
+            .getBoolean(DependencyCheckConstants.SECURITY_HOTSPOT)
+            .orElse(DependencyCheckConstants.SECURITY_HOTSPOT_DEFAULT)
+            ? DependencyCheckConstants.RULE_KEY_WITH_SECURITY_HOTSPOT
+            : DependencyCheckConstants.RULE_KEY;
     }
 
     /**
      * We are using following sources for score calculation
      * https://nvd.nist.gov/vuln-metrics/cvss
      * https://docs.npmjs.com/about-audit-reports#severity
-     * 
+     *
      * @param severity
      * @param blocker
      * @param critical
@@ -101,11 +122,25 @@ public final class DependencyCheckUtils {
     }
 
     public static Float severityToScore(String severity, Configuration config) {
-        Float severityBlocker = config.getFloat(DependencyCheckConstants.SEVERITY_BLOCKER).orElse(DependencyCheckConstants.SEVERITY_BLOCKER_DEFAULT);
-        Float severityCritical = config.getFloat(DependencyCheckConstants.SEVERITY_CRITICAL).orElse(DependencyCheckConstants.SEVERITY_CRITICAL_DEFAULT);
-        Float severityMajor = config.getFloat(DependencyCheckConstants.SEVERITY_MAJOR).orElse(DependencyCheckConstants.SEVERITY_MAJOR_DEFAULT);
-        Float severityMinor = config.getFloat(DependencyCheckConstants.SEVERITY_MINOR).orElse(DependencyCheckConstants.SEVERITY_MINOR_DEFAULT);
-        return DependencyCheckUtils.severityToScore(severity, severityBlocker, severityCritical, severityMajor, severityMinor);
+        Float severityBlocker = config
+            .getFloat(DependencyCheckConstants.SEVERITY_BLOCKER)
+            .orElse(DependencyCheckConstants.SEVERITY_BLOCKER_DEFAULT);
+        Float severityCritical = config
+            .getFloat(DependencyCheckConstants.SEVERITY_CRITICAL)
+            .orElse(DependencyCheckConstants.SEVERITY_CRITICAL_DEFAULT);
+        Float severityMajor = config
+            .getFloat(DependencyCheckConstants.SEVERITY_MAJOR)
+            .orElse(DependencyCheckConstants.SEVERITY_MAJOR_DEFAULT);
+        Float severityMinor = config
+            .getFloat(DependencyCheckConstants.SEVERITY_MINOR)
+            .orElse(DependencyCheckConstants.SEVERITY_MINOR_DEFAULT);
+        return DependencyCheckUtils.severityToScore(
+            severity,
+            severityBlocker,
+            severityCritical,
+            severityMajor,
+            severityMinor
+        );
     }
 
     public static Optional<Identifier> getMavenIdentifier(@NonNull Dependency dependency) {
@@ -139,7 +174,11 @@ public final class DependencyCheckUtils {
      * TODO: Add Markdown formatting if and when Sonar supports it
      * https://jira.sonarsource.com/browse/SONAR-4161
      */
-    public static String formatDescription(Dependency dependency, Vulnerability vulnerability, Configuration config) {
+    public static String formatDescription(
+        Dependency dependency,
+        Vulnerability vulnerability,
+        Configuration config
+    ) {
         StringBuilder sb = new StringBuilder();
         sb.append("Filename: ").append(dependency.getFileName()).append(" | ");
         sb.append("Reference: ").append(vulnerability.getName()).append(" | ");
@@ -152,7 +191,12 @@ public final class DependencyCheckUtils {
         return sb.toString().trim();
     }
 
-    public static String formatDescription(Dependency dependency, Collection<Vulnerability> vulnerabilities, Vulnerability highestVulnerability, Configuration config) {
+    public static String formatDescription(
+        Dependency dependency,
+        Collection<Vulnerability> vulnerabilities,
+        Vulnerability highestVulnerability,
+        Configuration config
+    ) {
         StringBuilder sb = new StringBuilder();
         sb.append("Filename: ").append(dependency.getFileName()).append(" | ");
         sb.append("Highest CVSS Score: ").append(highestVulnerability.getCvssScore(config)).append(" | ");
@@ -165,28 +209,50 @@ public final class DependencyCheckUtils {
     }
 
     public static boolean skipPlugin(Configuration config) {
-        return config.getBoolean(DependencyCheckConstants.SKIP_PROPERTY).orElse(DependencyCheckConstants.SKIP_PROPERTY_DEFAULT);
+        return config
+            .getBoolean(DependencyCheckConstants.SKIP_PROPERTY)
+            .orElse(DependencyCheckConstants.SKIP_PROPERTY_DEFAULT);
     }
 
     public static boolean summarizeVulnerabilities(Configuration config) {
-        return config.getBoolean(DependencyCheckConstants.SUMMARIZE_PROPERTY).orElse(DependencyCheckConstants.SUMMARIZE_PROPERTY_DEFAULT);
+        return config
+            .getBoolean(DependencyCheckConstants.SUMMARIZE_PROPERTY)
+            .orElse(DependencyCheckConstants.SUMMARIZE_PROPERTY_DEFAULT);
     }
 
-    public static Optional<DependencyReason> getBestDependencyReason(@NonNull Dependency dependency, @NonNull Collection<DependencyReason> dependencyReasons) {
-
-        Comparator<DependencyReason> comparatorTextRange = Comparator.comparing(r -> r.getBestTextRange(dependency));
+    public static Optional<DependencyReason> getBestDependencyReason(
+        @NonNull Dependency dependency,
+        @NonNull Collection<DependencyReason> dependencyReasons
+    ) {
+        Comparator<DependencyReason> comparatorTextRange = Comparator.comparing(
+            r -> r.getBestTextRange(dependency)
+        );
         // Shorter Files-Names indicates to be a root configuration file
-        Comparator<DependencyReason> comparatorFileLength = Comparator.comparingInt(r -> r.getInputComponent().toString().length());
-
-        if (dependency.isJavaDependency() && dependencyReasons.stream().filter(c -> c.getLanguage().equals(Language.JAVA)).count() > 0) {
+        Comparator<DependencyReason> comparatorFileLength = Comparator.comparingInt(
+            r -> r.getInputComponent().toString().length()
+        );
+        if (dependency.isJavaDependency() &&
+            dependencyReasons.stream().filter(c -> c.getLanguage().equals(Language.JAVA)).count() > 0
+        ) {
             // If a Maven Identifier is present we prefer Java dependency reasons
-            return dependencyReasons.stream().filter(c -> c.getLanguage().equals(Language.JAVA)).sorted(comparatorFileLength).sorted(comparatorTextRange).findFirst();
+            return dependencyReasons.stream()
+                .filter(c -> c.getLanguage().equals(Language.JAVA))
+                .sorted(comparatorFileLength)
+                .sorted(comparatorTextRange).findFirst();
         }
-        if (dependency.isJavaScriptDependency() && dependencyReasons.stream().filter(c -> c.getLanguage().equals(Language.JAVASCRIPT)).count() > 0) {
+        if (dependency.isJavaScriptDependency() &&
+            dependencyReasons.stream().filter(c -> c.getLanguage().equals(Language.JAVASCRIPT)).count() > 0) {
             // If a NPM or JavaScript Identifier is present we prefer JavaScript dependency
             // reasons
-            return dependencyReasons.stream().filter(c -> c.getLanguage().equals(Language.JAVASCRIPT)).sorted(comparatorFileLength).sorted(comparatorTextRange).findFirst();
+            return dependencyReasons.stream()
+                .filter(c -> c.getLanguage().equals(Language.JAVASCRIPT))
+                .sorted(comparatorFileLength)
+                .sorted(comparatorTextRange)
+                .findFirst();
         }
-        return dependencyReasons.stream().sorted(comparatorFileLength).sorted(comparatorTextRange).findFirst();
+        return dependencyReasons.stream()
+            .sorted(comparatorFileLength)
+            .sorted(comparatorTextRange)
+            .findFirst();
     }
 }
