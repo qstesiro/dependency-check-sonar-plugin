@@ -67,6 +67,7 @@ public class DependencyCheckMeasureComputer implements MeasureComputer {
         //     context.getMeasure(DependencyCheckMetrics.TOTAL_DEPENDENCIES.key()) != null) {
         //     return;
         // }
+        // // 实际不生效所有measure都是被绑定到project级别
         // if (context.getComponent().getType() != Type.FILE) {
         //     int blocker = sumMeasure(context, DependencyCheckMetrics.CRITICAL_SEVERITY_VULNS.key());
         //     int high = sumMeasure(context, DependencyCheckMetrics.HIGH_SEVERITY_VULNS.key());

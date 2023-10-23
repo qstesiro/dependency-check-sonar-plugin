@@ -50,7 +50,7 @@ import edu.umd.cs.findbugs.annotations.Nullable;
         "relatedDependencies",
         "suppressedVulnerabilities",
         "suppressedVulnerabilityIds"
-    }
+   }
 )
 public class Dependency {
 
@@ -66,13 +66,17 @@ public class Dependency {
     @JsonCreator
     public Dependency(
         @JsonProperty(value = "fileName", required = true)
-        @NonNull String fileName,
+        @NonNull
+        String fileName,
         @JsonProperty(value = "filePath", required = true)
-        @NonNull String filePath,
+        @NonNull
+        String filePath,
         @JsonProperty(value = "md5")
-        @Nullable String md5Hash,
+        @Nullable
+        String md5Hash,
         @JsonProperty(value = "sha1")
-        @Nullable String sha1Hash,
+        @Nullable
+        String sha1Hash,
         @JsonProperty(value = "evidenceCollected")
         @JsonDeserialize(using = EvidenceDeserializer.class)
         Map<String, List<Evidence>> evidenceCollected,
@@ -80,12 +84,17 @@ public class Dependency {
         @JsonDeserialize(using = VulnerabilitiesDeserializer.class)
         List<Vulnerability> vulnerabilities,
         // For JSON
-        @JsonProperty(value = "packages") @Nullable Collection<Identifier> packages,
-        @JsonProperty(value = "vulnerabilityIds") @Nullable Collection<Identifier> vulnerabilityIds,
+        @JsonProperty(value = "packages")
+        @Nullable
+        Collection<Identifier> packages,
+        @JsonProperty(value = "vulnerabilityIds")
+        @Nullable
+        Collection<Identifier> vulnerabilityIds,
         // For XML
         @JsonProperty(value = "identifiers")
         @JsonDeserialize(using = IdentifierDeserializer.class)
-        @Nullable Map<String, Collection<Identifier>> identifiers
+        @Nullable
+        Map<String, Collection<Identifier>> identifiers
     ) {
         this.fileName = fileName;
         this.filePath = filePath;

@@ -35,7 +35,6 @@ import edu.umd.cs.findbugs.annotations.Nullable;
 
 public class VulnerabilitiesDeserializer extends StdDeserializer<List<Vulnerability>>{
 
-
     /**
      *
      */
@@ -50,7 +49,10 @@ public class VulnerabilitiesDeserializer extends StdDeserializer<List<Vulnerabil
     }
 
     @Override
-    public List<Vulnerability> deserialize(JsonParser jsonParser, DeserializationContext deserializationContext) throws IOException {
+    public List<Vulnerability> deserialize(
+        JsonParser jsonParser,
+        DeserializationContext deserializationContext
+    ) throws IOException {
         ArrayList<Vulnerability> vulnerabilities = new ArrayList<>();
         // for JSON
         if (JsonToken.START_ARRAY.equals(jsonParser.currentToken())) {

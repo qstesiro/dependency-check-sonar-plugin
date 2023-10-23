@@ -33,11 +33,23 @@ public class Evidence {
     private final Confidence confidence;
 
     @JsonCreator
-    public Evidence(@JsonProperty(value = "source", required = true) @NonNull String source,
-                    @JsonProperty(value = "name", required = true) @NonNull String name,
-                    @JsonProperty(value = "value", required = true) @NonNull String value,
-                    @JsonProperty(value = "type", required = true) @NonNull String type,
-                    @JsonProperty(value = "confidence", required = true) @NonNull Confidence confidence) {
+    public Evidence(
+        @JsonProperty(value = "source", required = true)
+        @NonNull
+        String source,
+        @JsonProperty(value = "name", required = true)
+        @NonNull
+        String name,
+        @JsonProperty(value = "value", required = true)
+        @NonNull
+        String value,
+        @JsonProperty(value = "type", required = true)
+        @NonNull
+        String type,
+        @JsonProperty(value = "confidence", required = true)
+        @NonNull
+        Confidence confidence
+    ) {
         this.source = source;
         this.name = name;
         this.value = value;

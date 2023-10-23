@@ -208,12 +208,15 @@ public class DependencyReasonSearcher {
                     context.config()
                 )
             );
-        sonarIssue.at(location).forRule(
-            RuleKey.of(
-                DependencyCheckConstants.REPOSITORY_KEY,
-                DependencyCheckUtils.getRuleKey(context.config())
+        sonarIssue.at(location)
+            .forRule(
+                RuleKey.of(
+                    DependencyCheckConstants.REPOSITORY_KEY,
+                    DependencyCheckUtils.getRuleKey(context.config())
+                )
             )
-        ).overrideSeverity(severity).save();
+            .overrideSeverity(severity)
+            .save();
         projectMetric.incrementCount(severity);
     }
 
@@ -232,12 +235,15 @@ public class DependencyReasonSearcher {
                     dependency, vulnerabilities, highestVulnerability, context.config()
                 )
             );
-        sonarIssue.at(location).forRule(
-            RuleKey.of(
-                DependencyCheckConstants.REPOSITORY_KEY,
-                DependencyCheckUtils.getRuleKey(context.config())
+        sonarIssue.at(location)
+            .forRule(
+                RuleKey.of(
+                    DependencyCheckConstants.REPOSITORY_KEY,
+                    DependencyCheckUtils.getRuleKey(context.config())
+                )
             )
-        ).overrideSeverity(severity).save();
+            .overrideSeverity(severity)
+            .save();
         projectMetric.incrementCount(severity);
     }
 }

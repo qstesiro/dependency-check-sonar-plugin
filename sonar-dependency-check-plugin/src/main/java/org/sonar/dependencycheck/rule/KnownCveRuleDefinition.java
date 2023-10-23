@@ -36,14 +36,12 @@ public class KnownCveRuleDefinition implements RulesDefinition {
     public void define(Context context) {
         NewRepository repo = context.createRepository(
             DependencyCheckConstants.REPOSITORY_KEY,
-            DependencyCheckConstants.LANGUAGE_KEY
+            DependencyCheckConstants.LANGUAGE_KEY // 必须指定语言
         );
-        repo.setName("OWASP");
+        repo.setName("OWASP"); // 名称
         NewRule rule = repo.createRule(DependencyCheckConstants.RULE_KEY);
-        fillOWASPRule(rule);
-        NewRule ruleWithSecurityHotspot = repo.createRule(
-            DependencyCheckConstants.RULE_KEY_WITH_SECURITY_HOTSPOT
-        );
+        fillOWASPRule(rule); // 不设置RuleType,默认为VULNERABILITY ???
+        NewRule ruleWithSecurityHotspot = repo.createRule(DependencyCheckConstants.RULE_KEY_WITH_SECURITY_HOTSPOT);
         fillOWASPRule(ruleWithSecurityHotspot);
         ruleWithSecurityHotspot.setType(RuleType.SECURITY_HOTSPOT);
         repo.done();

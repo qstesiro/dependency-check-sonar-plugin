@@ -51,6 +51,7 @@ public abstract class DependencyReason {
         metrics = new DependencyCheckMetric(inputComponent);
         this.language = language;
     }
+
     /**
      * @return true or false if this component is the reason for your dependency
      */
@@ -83,6 +84,7 @@ public abstract class DependencyReason {
         );
         return new TextRangeConfidence(inputFile.selectLine(1), Confidence.LOW);
     }
+
     /**
      * Returns for a dependency the a TextRange, where the import is happen
      *
