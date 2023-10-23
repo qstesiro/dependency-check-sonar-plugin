@@ -110,6 +110,21 @@ public class DependencyCheckSensor implements ProjectSensor {
         }
     }
 
+    private void uploadJSONReport(SensorContext context) {
+        try {
+            JsonReportFile jsonReportFile = JsonReportFile.getJsonReport(context.config(), fileSystem, pathResolver);
+            String jsonReport = jsonReportFile.getReportContent();
+            if (jsonReport != null) {
+                LOGGER.info("Upload Dependency-Check JSON-Report");
+                context.<String>newMeasure().forMetric(DependencyCheckMetrics.JSON_REPORT).on(context.project())
+                        .withValue(jsonReport).save();
+            }
+        } catch (FileNotFoundException e) {
+            LOGGER.info(e.getMessage());
+            LOGGER.debug(e.getMessage(), e);
+        }
+    }
+
     private void addWarnings(Analysis analysis) {
         Optional<List<AnalysisException>> exceptions = analysis.getScanInfo().getExceptions();
         if (exceptions.isPresent()) {
@@ -156,6 +171,7 @@ public class DependencyCheckSensor implements ProjectSensor {
                 }
             }
             uploadHTMLReport(sensorContext);
+            uploadJSONReport(sensorContext);
         }
         profiler.stopInfo();
     }

@@ -43,6 +43,7 @@ public final class DependencyCheckMetrics implements Metrics {
     private static final String LOW_SEVERITY_VULNS_KEY = "low_severity_vulns";
 
     private static final String REPORT_KEY = "report";
+    private static final String JSON_REPORT_KEY = "json_report";
 
     public static final Metric<Integer> INHERITED_RISK_SCORE = new Metric.Builder(DependencyCheckMetrics.INHERITED_RISK_SCORE_KEY, "Inherited Risk Score", Metric.ValueType.INT)
             .setDescription("Inherited Risk Score")
@@ -130,6 +131,14 @@ public final class DependencyCheckMetrics implements Metrics {
             .setDeleteHistoricalData(true)
             .create();
 
+    public static final Metric<String> JSON_REPORT = new Metric.Builder(JSON_REPORT_KEY, "Dependency-Check JSON Report", Metric.ValueType.DATA)
+            .setDescription("Report JSON")
+            .setQualitative(Boolean.FALSE)
+            .setDomain(DependencyCheckMetrics.DOMAIN)
+            .setHidden(false)
+            .setDeleteHistoricalData(true)
+            .create();
+
     public static double vulnerableComponentRatio(int vulnerabilities, int vulnerableComponents) {
         double ratio = 0.0;
         if(vulnerableComponents > 0) {
@@ -155,7 +164,8 @@ public final class DependencyCheckMetrics implements Metrics {
                 DependencyCheckMetrics.TOTAL_DEPENDENCIES,
                 DependencyCheckMetrics.VULNERABLE_DEPENDENCIES,
                 DependencyCheckMetrics.TOTAL_VULNERABILITIES,
-                DependencyCheckMetrics.REPORT
+                DependencyCheckMetrics.REPORT,
+                DependencyCheckMetrics.JSON_REPORT
         );
     }
 }
