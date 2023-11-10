@@ -1,12 +1,12 @@
 # 编译
 {
     alias copy-plugin="cp sonar-dependency-check-plugin/target/sonar-dependency-check-plugin-2.0.8.1.jar ~/github.com/qstesiro/demo/sonar/sonarqube-plugin/extensions/plugins/ &&
-                        cp sonar-dependency-check-plugin/target/sonar-dependency-check-plugin-2.0.8.1.jar ~/"
+                        cp sonar-dependency-check-plugin/target/sonar-dependency-check-plugin-2.0.8.1.jar ~/ && cp sonar-dependency-check-plugin/target/sonar-dependency-check-plugin-2.0.8.1.jar /media/sf_share/"
     alias sonar-restart="curl http://localhost:9000/api/system/restart -u 'admin:iwpyuh' -X POST"
 
-    alias clean='mvn clean'
+    alias clean='mvn -s ~/.m2/locals.xml clean'
 
-    alias build='mvn package -Dmaven.test.skip=true -Dlicense.skip=true && copy-plugin && sonar-restart'
+    alias build='mvn -s ~/.m2/locals.xml package -Dmaven.test.skip=true -Dlicense.skip=true && copy-plugin && sonar-restart'
 }
 
 # 扫描

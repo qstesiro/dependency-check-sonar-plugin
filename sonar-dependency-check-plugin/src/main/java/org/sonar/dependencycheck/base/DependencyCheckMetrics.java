@@ -45,6 +45,9 @@ public final class DependencyCheckMetrics implements Metrics {
     private static final String REPORT_KEY = "report";
     private static final String JSON_REPORT_KEY = "json_report";
 
+    private static final String DEPENDENCY_BLOCK_NUM_KEY = "dependency_block_num";
+    private static final String DEPENDENCY_BLOCK_HITS_KEY = "dependency_block_hits";
+
     public static final Metric<Integer> INHERITED_RISK_SCORE = new Metric.Builder(
         DependencyCheckMetrics.INHERITED_RISK_SCORE_KEY,
         "Inherited Risk Score",
@@ -161,13 +164,39 @@ public final class DependencyCheckMetrics implements Metrics {
         .setDeleteHistoricalData(true)
         .create();
 
-    public static final Metric<String> JSON_REPORT = new Metric.Builder(JSON_REPORT_KEY, "Dependency-Check JSON Report", Metric.ValueType.DATA)
-            .setDescription("Report JSON")
-            .setQualitative(Boolean.FALSE)
-            .setDomain(DependencyCheckMetrics.DOMAIN)
-            .setHidden(false)
-            .setDeleteHistoricalData(true)
-            .create();
+    public static final Metric<String> JSON_REPORT = new Metric.Builder(
+        JSON_REPORT_KEY,
+        "Dependency-Check JSON Report",
+        Metric.ValueType.DATA
+    ).setDescription("Report JSON")
+        .setQualitative(Boolean.FALSE)
+        .setDomain(DependencyCheckMetrics.DOMAIN)
+        .setHidden(false)
+        .setDeleteHistoricalData(false)
+        .create();
+
+    public static final Metric<Integer> DEPENDENCY_BLOCK_NUM = new Metric.Builder(
+        DEPENDENCY_BLOCK_NUM_KEY,
+        "Dependency Package Block Number",
+        Metric.ValueType.INT
+    ).setDescription("Dependency Package Block Number")
+        .setDirection(Metric.DIRECTION_WORST)
+        .setQualitative(Boolean.TRUE)
+        .setDomain(DependencyCheckMetrics.DOMAIN)
+        .setBestValue(0.0)
+        .setHidden(false)
+        .create();
+
+    public static final Metric<String> DEPENDENCY_BLOCK_HITS = new Metric.Builder(
+        DEPENDENCY_BLOCK_HITS_KEY,
+        "Dependency Package Block Hits",
+        Metric.ValueType.DATA
+    ).setDescription("Dependency Package Block Hits")
+        .setQualitative(Boolean.FALSE)
+        .setDomain(DependencyCheckMetrics.DOMAIN)
+        .setHidden(false)
+        .setDeleteHistoricalData(false)
+        .create();
 
     public static double vulnerableComponentRatio(int vulnerabilities, int vulnerableComponents) {
         double ratio = 0.0;
@@ -194,7 +223,9 @@ public final class DependencyCheckMetrics implements Metrics {
                 DependencyCheckMetrics.VULNERABLE_DEPENDENCIES,
                 DependencyCheckMetrics.TOTAL_VULNERABILITIES,
                 DependencyCheckMetrics.REPORT,
-                DependencyCheckMetrics.JSON_REPORT
+                DependencyCheckMetrics.JSON_REPORT,
+                DependencyCheckMetrics.DEPENDENCY_BLOCK_NUM,
+                DependencyCheckMetrics.DEPENDENCY_BLOCK_HITS
         );
     }
 }

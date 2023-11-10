@@ -122,6 +122,15 @@ public class DependencyCheckConfiguration {
                 .description("When enabled all SonarQube issues are flagged as Security-Hotspot.")
                 .defaultValue(Boolean.toString(DependencyCheckConstants.SECURITY_HOTSPOT_DEFAULT))
                 .type(PropertyType.BOOLEAN)
+                .build(),
+            PropertyDefinition
+                .builder(DependencyCheckConstants.BLOCK_QUERY_SERVER)
+                .onQualifiers(Qualifiers.PROJECT)
+                .subCategory(DependencyCheckConstants.SUB_CATEGORY_GENERAL)
+                .name("Block Query Server")
+                .description("Dependency block query server host (default: http://xxx.xxx.net/api/v1/xxx/sonar/block)")
+                .defaultValue(DependencyCheckConstants.BLOCK_QUERY_SERVER_DEFAULT)
+                .type(PropertyType.STRING)
                 .build()
         );
     }

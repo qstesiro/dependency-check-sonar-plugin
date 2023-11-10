@@ -11,4 +11,10 @@
          -d 'projectKeys=console.wuxing-cs.v' \
          -d 'metricKeys=json_report' \
          -G | jq
+
+    curl http://localhost:9000/api/measures/search \
+         -u 'admin:iwpyuh' \
+         -d 'projectKeys=console.wuxing-cs.v' \
+         -d 'metricKeys=dependency_block_hits' \
+         -G | jq
 }

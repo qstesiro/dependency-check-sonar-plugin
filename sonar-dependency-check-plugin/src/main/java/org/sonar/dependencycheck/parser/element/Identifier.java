@@ -42,6 +42,7 @@ public class Identifier {
         this.id = id;
         this.confidence = confidence;
     }
+
     /**
      * @return the id
      */
@@ -55,6 +56,41 @@ public class Identifier {
     public Optional<Confidence> getConfidence() {
         return Optional.ofNullable(confidence);
     }
+
+    public Optional<String> getPackageType() {
+        if (StringUtils.isNotBlank(getId())) {
+            return Optional.of(StringUtils.substringAfter(StringUtils.substringBefore(getId(), "/"), "pkg:"));
+        }
+        return Optional.empty();
+    }
+
+    public Optional<String> getPackageArtifact() {
+        if (StringUtils.isNotBlank(getId())) {
+            return Optional.of(StringUtils.substringAfter(getId(), "/"));
+        }
+        return Optional.empty();
+    }
+
+    public Optional<String> getPackageName() {
+        Optional<String> artifact = getPackageArtifact();
+        if (artifact.isPresent()) {
+            if (StringUtils.isNotBlank(artifact.get())) {
+                return Optional.of(StringUtils.substringBefore(artifact.get(), "@"));
+            }
+        }
+        return Optional.empty();
+    }
+
+    public Optional<String> getPackageVersion() {
+        Optional<String> artifact = getPackageArtifact();
+        if (artifact.isPresent()) {
+            if (StringUtils.isNotBlank(artifact.get())) {
+                return Optional.of(StringUtils.substringAfter(artifact.get(), "@"));
+            }
+        }
+        return Optional.empty();
+    }
+
     public static Optional<String> getPackageType(@NonNull Identifier identifier) {
         if (StringUtils.isNotBlank(identifier.getId())) {
             // pkg:maven/struts/struts@1.2.8 -> maven
@@ -65,6 +101,7 @@ public class Identifier {
         }
         return Optional.empty();
     }
+
     public static Optional<String> getPackageArtifact(@NonNull Identifier identifier) {
         if (StringUtils.isNotBlank(identifier.getId())) {
             // pkg:maven/struts/struts@1.2.8 -> struts/struts@1.2.8
@@ -72,6 +109,16 @@ public class Identifier {
             // pkg:npm/arr-flatten@1.1.0 -> arr-flatten@1.1.0
             // pkg:npm/mime -> mime
             return Optional.of(StringUtils.substringAfter(identifier.getId(), "/"));
+        }
+        return Optional.empty();
+    }
+
+    public static Optional<String> getPackageName(@NonNull Identifier identifier) {
+        Optional<String> artifact = getPackageArtifact(identifier);
+        if (artifact.isPresent()) {
+            if (StringUtils.isNotBlank(artifact.get())) {
+                return Optional.of(StringUtils.substringBefore(artifact.get(), "@"));
+            }
         }
         return Optional.empty();
     }

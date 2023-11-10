@@ -45,6 +45,7 @@ import org.sonar.dependencycheck.reason.DependencyReasonSearcher;
 import org.sonar.dependencycheck.report.HtmlReportFile;
 import org.sonar.dependencycheck.report.JsonReportFile;
 import org.sonar.dependencycheck.report.XmlReportFile;
+import org.sonar.dependencycheck.block.Blocker;
 
 import edu.umd.cs.findbugs.annotations.Nullable;
 
@@ -168,10 +169,20 @@ public class DependencyCheckSensor implements ProjectSensor {
                     addWarnings(analysis.get());
                 }
             }
+            parseBlock(sensorContext, analysis.get());
             uploadHTMLReport(sensorContext);
             uploadJSONReport(sensorContext);
         }
         profiler.stopInfo();
+    }
+
+    private void parseBlock(SensorContext context, Analysis analysis) {
+        try {
+            Blocker blocker = new Blocker(context);
+            blocker.parse(analysis);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
